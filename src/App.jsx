@@ -130,6 +130,9 @@ export default function App() {
       <div className="layout">
         <div className="panel">
           <h2>Report a condition</h2>
+          <p className="panel-note">
+            Your report helps emergency responders see what's happening and where, in real time — so they can prioritize and reach affected areas faster.
+          </p>
           <form onSubmit={handleSubmit}>
             <textarea
               placeholder="What's happening? e.g. Road flooded near Tema roundabout, knee-deep water."

@@ -79,6 +79,14 @@ body { margin: 0; background: var(--ink); color: var(--paper); }
   margin: 0 0 16px;
 }
 
+.panel-note {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--cloud);
+  opacity: 0.85;
+  margin: -8px 0 16px;
+}
+
 form {
   display: flex;
   flex-direction: column;
