@@ -1,17 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { supabase } from './supabaseClient'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import L from 'leaflet'
-
-// Fix default marker icons (Vite + Leaflet quirk)
-delete L.Icon.Default.prototype._getIconUrl
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-})
-
-const GHANA_CENTER = [7.9465, -1.0232]
 
 function timeAgo(dateStr) {
   const diff = (Date.now() - new Date(dateStr).getTime()) / 1000
@@ -173,26 +161,6 @@ export default function App() {
             </button>
             <div className="status-line">{status}</div>
           </form>
-
-          <div className="map-wrap">
-            <MapContainer center={GHANA_CENTER} zoom={7} style={{ height: '100%', width: '100%' }}>
-              <TileLayer
-                attribution='&copy; OpenStreetMap contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {reports
-                .filter((r) => r.lat && r.lng)
-                .map((r) => (
-                  <Marker key={r.id} position={[r.lat, r.lng]}>
-                    <Popup>
-                      <strong>{r.location_name || 'Unnamed location'}</strong>
-                      <br />
-                      {r.description}
-                    </Popup>
-                  </Marker>
-                ))}
-            </MapContainer>
-          </div>
         </div>
 
         <div className="feed">
@@ -209,7 +177,18 @@ export default function App() {
               <div className={`severity-bar ${r.severity || 'unspecified'}`} />
               <div className="report-body">
                 <div className="report-meta">
-                  {r.location_name || (r.lat ? `${r.lat.toFixed(3)}, ${r.lng.toFixed(3)}` : 'Location not provided')}
+                  {r.lat && r.lng ? (
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="location-link"
+                    >
+                      {r.location_name || `${r.lat.toFixed(3)}, ${r.lng.toFixed(3)}`}
+                    </a>
+                  ) : (
+                    r.location_name || 'Location not provided'
+                  )}
                   {' · '}
                   {timeAgo(r.created_at)}
                   {' · '}

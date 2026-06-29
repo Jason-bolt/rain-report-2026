@@ -128,14 +128,6 @@ button.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .status-line { font-size: 12px; color: var(--cloud); min-height: 16px; }
 
-.map-wrap {
-  height: 320px;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-top: 18px;
-  border: 1px solid var(--slate-light);
-}
-
 .feed {
   padding: 24px;
 }
@@ -171,6 +163,12 @@ button.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   color: var(--cloud);
   opacity: 0.7;
   margin-bottom: 4px;
+}
+
+.location-link {
+  color: var(--signal);
+  text-decoration: underline;
+  opacity: 1;
 }
 
 .report-desc { font-size: 14px; line-height: 1.5; margin: 4px 0 8px; }
