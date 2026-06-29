@@ -26,6 +26,8 @@ Easiest: push this folder to GitHub, then import it on vercel.com (free) — it 
 - No login required to submit a report (keeps friction low during emergencies)
 - Each report with GPS coordinates shows a clickable location link that opens Google Maps at that exact point
 - The feed can be filtered by severity, sorted by newest/oldest, and paginated (20/50/100 reports per page)
+- Fully responsive layout (desktop, tablet, mobile)
+- Footer with links to the developer's GitHub and LinkedIn
 
 ## Current limits
 - The feed fetches the most recent 100 reports from the database; pagination works within that batch. If report volume grows past 100, older reports won't be reachable yet — switching to server-side pagination (Supabase `.range()`) would be the next step.
