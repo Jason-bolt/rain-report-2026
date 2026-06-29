@@ -137,6 +137,23 @@ button.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.feed-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.feed-controls select {
+  background: var(--slate);
+  border: 1px solid var(--slate-light);
+  color: var(--paper);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
 }
 
 .report-card {

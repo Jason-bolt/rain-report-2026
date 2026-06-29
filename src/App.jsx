@@ -18,6 +18,8 @@ export default function App() {
   const [file, setFile] = useState(null)
   const [status, setStatus] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [severityFilter, setSeverityFilter] = useState('all')
+  const [sortOrder, setSortOrder] = useState('newest')
   const fileInputRef = useRef()
 
   useEffect(() => {
@@ -110,6 +112,14 @@ export default function App() {
     }
   }
 
+  const visibleReports = reports
+    .filter((r) => severityFilter === 'all' || r.severity === severityFilter)
+    .sort((a, b) =>
+      sortOrder === 'newest'
+        ? new Date(b.created_at) - new Date(a.created_at)
+        : new Date(a.created_at) - new Date(b.created_at)
+    )
+
   return (
     <div className="app">
       <div className="topbar">
@@ -165,14 +175,31 @@ export default function App() {
 
         <div className="feed">
           <div className="feed-header">
-            <h2 style={{ margin: 0 }}>Live feed ({reports.length})</h2>
+            <h2 style={{ margin: 0 }}>Live feed ({visibleReports.length})</h2>
+            <div className="feed-controls">
+              <select value={severityFilter} onChange={(e) => setSeverityFilter(e.target.value)}>
+                <option value="all">All severities</option>
+                <option value="unspecified">Severity unknown</option>
+                <option value="minor">Minor</option>
+                <option value="moderate">Moderate</option>
+                <option value="severe">Severe</option>
+              </select>
+              <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+              </select>
+            </div>
           </div>
 
-          {reports.length === 0 && (
-            <div className="empty-state">No reports yet. Be the first to report a condition near you.</div>
+          {visibleReports.length === 0 && (
+            <div className="empty-state">
+              {reports.length === 0
+                ? 'No reports yet. Be the first to report a condition near you.'
+                : 'No reports match the current filter.'}
+            </div>
           )}
 
-          {reports.map((r) => (
+          {visibleReports.map((r) => (
             <div className="report-card" key={r.id}>
               <div className={`severity-bar ${r.severity || 'unspecified'}`} />
               <div className="report-body">
