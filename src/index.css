@@ -205,6 +205,31 @@ button.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   max-height: 220px;
 }
 
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px 0;
+  font-size: 13px;
+  color: var(--cloud);
+}
+
+.pagination button {
+  background: var(--slate);
+  border: 1px solid var(--slate-light);
+  color: var(--paper);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .empty-state {
   color: var(--cloud);
   opacity: 0.6;

@@ -20,6 +20,8 @@ export default function App() {
   const [submitting, setSubmitting] = useState(false)
   const [severityFilter, setSeverityFilter] = useState('all')
   const [sortOrder, setSortOrder] = useState('newest')
+  const [pageSize, setPageSize] = useState(20)
+  const [page, setPage] = useState(0)
   const fileInputRef = useRef()
 
   useEffect(() => {
@@ -112,13 +114,20 @@ export default function App() {
     }
   }
 
-  const visibleReports = reports
+  const filteredReports = reports
     .filter((r) => severityFilter === 'all' || r.severity === severityFilter)
     .sort((a, b) =>
       sortOrder === 'newest'
         ? new Date(b.created_at) - new Date(a.created_at)
         : new Date(a.created_at) - new Date(b.created_at)
     )
+
+  const totalPages = Math.max(1, Math.ceil(filteredReports.length / pageSize))
+  const currentPage = Math.min(page, totalPages - 1)
+  const visibleReports = filteredReports.slice(
+    currentPage * pageSize,
+    currentPage * pageSize + pageSize
+  )
 
   return (
     <div className="app">
@@ -180,16 +189,39 @@ export default function App() {
           <div className="feed-header">
             <h2 style={{ margin: 0 }}>Live feed ({visibleReports.length})</h2>
             <div className="feed-controls">
-              <select value={severityFilter} onChange={(e) => setSeverityFilter(e.target.value)}>
+              <select
+                value={severityFilter}
+                onChange={(e) => {
+                  setSeverityFilter(e.target.value)
+                  setPage(0)
+                }}
+              >
                 <option value="all">All severities</option>
                 <option value="unspecified">Severity unknown</option>
                 <option value="minor">Minor</option>
                 <option value="moderate">Moderate</option>
                 <option value="severe">Severe</option>
               </select>
-              <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+              <select
+                value={sortOrder}
+                onChange={(e) => {
+                  setSortOrder(e.target.value)
+                  setPage(0)
+                }}
+              >
                 <option value="newest">Newest first</option>
                 <option value="oldest">Oldest first</option>
+              </select>
+              <select
+                value={pageSize}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value))
+                  setPage(0)
+                }}
+              >
+                <option value={20}>20 per page</option>
+                <option value={50}>50 per page</option>
+                <option value={100}>100 per page</option>
               </select>
             </div>
           </div>
@@ -237,6 +269,26 @@ export default function App() {
               </div>
             </div>
           ))}
+
+          {filteredReports.length > 0 && (
+            <div className="pagination">
+              <button
+                type="button"
+                disabled={currentPage === 0}
+                onClick={() => setPage(currentPage - 1)}
+              >
+                ← Previous
+              </button>
+              <span>Page {currentPage + 1} of {totalPages}</span>
+              <button
+                type="button"
+                disabled={currentPage >= totalPages - 1}
+                onClick={() => setPage(currentPage + 1)}
+              >
+                Next →
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
