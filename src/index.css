@@ -45,7 +45,7 @@ body { margin: 0; background: var(--ink); color: var(--paper); }
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--alert);
+  background: var(--safe);
   margin-right: 6px;
   animation: pulse 1.6s infinite;
 }
@@ -151,6 +151,7 @@ button.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .feed-controls {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
