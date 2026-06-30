@@ -32,10 +32,16 @@ export default function App() {
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'reports' }, (payload) => {
         setReports((prev) => [payload.new, ...prev])
       })
-      .subscribe()
+      .subscribe((status) => {
+        console.log('[realtime]', status)
+      })
+
+    // Fallback poll every 15 s in case the realtime socket drops
+    const poll = setInterval(fetchReports, 15000)
 
     return () => {
       supabase.removeChannel(channel)
+      clearInterval(poll)
     }
   }, [])
 
@@ -45,7 +51,14 @@ export default function App() {
       .select('*')
       .order('created_at', { ascending: false })
       .limit(100)
-    if (!error) setReports(data)
+    if (!error) {
+      setReports((prev) => {
+        if (prev.length === 0) return data
+        const existingIds = new Set(prev.map((r) => r.id))
+        const newOnes = data.filter((r) => !existingIds.has(r.id))
+        return newOnes.length > 0 ? [...newOnes, ...prev] : prev
+      })
+    }
   }
 
   function useMyLocation() {
