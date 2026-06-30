@@ -238,7 +238,7 @@ button.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   display: flex;
   justify-content: center;
   gap: 20px;
-  padding: 17px;
+  padding: 10px;
   border-top: 1px solid var(--slate-light);
 }
 
